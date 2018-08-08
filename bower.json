@@ -1,0 +1,13 @@
+{
+  "name": "uvalib-directory",
+  "main": "uvalib-directory.html",
+  "dependencies": {
+    "uvalib-elements": "uvalib-components/uvalib-elements#master",
+    "vaadin-grid": "vaadin/vaadin-grid#^5.0.4"
+  },
+  "resolutions": {
+    "polymer": "^2.5.0",
+    "webcomponentsjs": "^1.1.1",
+    "lodash": "^4.17.5"
+  }
+}
