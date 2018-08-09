@@ -1,0 +1,218 @@
+<link rel="import" href="uvalib-directory.html">
+<link rel="import" href="../uvalib-theme/uvalib-icons.html">
+<link rel="import" href="../uva-helper-libs/polyfills/string.includes.html">
+<link rel="import" href="../uva-helper-libs/polyfills/array.find.html">
+
+
+<dom-module id="uvalib-staff">
+  <template>
+    <custom-style>
+      <style include="uvalib-theme">
+        iron-image {
+          width:90px !important;
+          height:90px !important;
+        }
+      </style>
+    </custom-style>
+
+  </template>
+
+  <script>
+    let uvalibStaffTemplate;
+
+    /**
+     * `uvalib-staff`
+     * UVA Library Staff directory component
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/staff.html
+     */
+    class UvalibStaff extends UvalibDirectory {
+      static get is() { return 'uvalib-staff'; }
+      static get properties() {
+        return Object.assign(super.properties,
+            {
+              _data: {
+                type: Array,
+                computed: "_makeData(_query,_staffViewEnabled,_libraries,_cachedPeople,_teams,_areas,_services,smallScreen)"
+              },
+              _mainDataModel: {
+                type: String,
+                value: "_cachedPeople"
+              },
+              _cachedPeople: {
+                type: Array,
+                computed: "_makePeople(_libraries,_people,_teams)"
+              },
+              searchPlaceholder: {
+                type: String,
+                value: "Search for Library staff"
+              },
+              team: {
+                type: String,
+                value: null
+              },
+              _controls: {
+                type: Boolean,
+                computed: '_showControls(team)',
+                observer: "_controlsChanged"
+              },
+              columns: {
+                type: Array,
+                computed: "_makeColumns(team)"
+              },
+              showColumns: {
+                type:String,
+                value: "name,title,team,contact,library"
+              }
+
+            });
+      }
+
+      static get template() {
+        if (!uvalibStaffTemplate) {
+            // Retrieve this element's dom-module template
+            uvalibStaffTemplate = Polymer.DomModule.import(this.is, 'template');
+            // Clone the contents of the superclass template
+            let superTemplateContents = UvalibDirectory.template.content.cloneNode(true);
+            // Insert the superclass contents
+            uvalibStaffTemplate.content.insertBefore(superTemplateContents,null);
+        }
+        return uvalibStaffTemplate;
+      }
+
+      _makePeople(){
+        if (this._libraries && this._libraries.length>0
+            && this._people && this._people.length>0
+            && this._teams && this._teams.length>0) {
+          if (!this._cPeople) {
+            if (this._libraries && this._people && this._teams) {
+              var people = {};
+              this._people.forEach(p=>{
+                if (p.computingId) {
+                  people[p.computingId] = p;
+                }
+              });
+              // assign teams to people
+              this._teams.forEach(t=>{
+                if (t.groupMembers)
+                  t.groupMembers.forEach(p=>{
+                    if (people[p]) {
+                      if (!people[p]['teams']) people[p]['teams'] = [t.uuid];
+                      else people[p]['teams'].push(t.uuid);
+                    }
+                  });
+              });
+              this._cPeople = Object.values(people);
+              return this._cPeople;
+            }
+            return [];
+          } else {
+            return this._cPeople;
+          }
+        } else {
+          return [];
+        }
+      }
+
+      _makeColumns(team){
+        var cols = [];
+        if (this.showColumns.indexOf("photo") > -1)
+          cols.push(
+            {
+              width: "120px",
+              flexGrow: 0,
+              mkCell: function(item,that){
+                return (item.field_image)?
+                  `<iron-image alt="Image of ${item.displayName}" sizing="cover" position="top" fade class="round" src="${item.field_image.url.replace('https://drupal.lib.virginia.edu/sites/default','https://www.library.virginia.edu')}"></iron-image>`:"";
+              }
+            });
+        if (this.showColumns.indexOf("name") > -1)
+          cols.push(
+            {
+              width: "20%",
+              title:"Name",
+              sortable:{dir:'asc',path:'lastName'},
+              mkCell:function(item,that){
+                return `<a href="/staff/${item.computingId}">${that._getName(item)}</p>`;
+              }
+            });
+        if (this.showColumns.indexOf("title") > -1)
+          cols.push(
+            {
+              width: "20%",
+              title:"Title",
+              mkCell:function(item){
+                return item.jobTitle? item.jobTitle:"";
+              }
+            });
+        if (this.showColumns.indexOf("team") > -1 && !team)
+          cols.push(
+            {
+              width: "20%",
+              title:"Team",
+              mkCell:function(item,that){
+                return item.teams? item.teams.reduce((a,team)=>`<a href="/teams/${team}">${that._getTeamName(team)}</a><br />`,""):"";
+              }
+            });
+        if (this.showColumns.indexOf("contact") > -1)
+          cols.push(
+            {
+              width: "20%",
+              title:"Contact",
+              mkCell:function(item,that){
+                var tmp=`<div class="email"><a href="mailto:${that._getEmail(item)}">${that._getEmail(item)}</a></div>`;
+                tmp+= item.phone? `<div class="phone"><a href="tel:${item.phone}">${item.phone}</a></div>`:"";
+                return tmp;
+              }
+            });
+        if (this.showColumns.indexOf("library") > -1)
+          cols.push(
+            {
+              width: "20%",
+              title:"Library",
+              mkCell:function(item,that){
+                return item.library?
+                  `<a href="/hours#${that._getLibrarySlug(item.library)}">${that._getLibraryName(item.library)}</a>`:
+                  "";
+              }
+            });
+        return cols;
+      }
+
+      /* filter rows by _query and other parameters */
+      _filterRows(rows){
+        return (this._query)?
+          rows.filter(row=>row.displayName.toLowerCase().includes(this._query.toLowerCase())):
+          rows;
+      }
+
+      /* Don't show search if team is specified */
+      _showControls(team){
+        return !(team);
+      }
+
+      _getName(person){
+          if (person) return (person.displayName)?
+            person.displayName:
+            person.fullName;
+      }
+
+      _getEmail(person){
+        return (person.email)?
+          person.email:
+          person.computingId+"@virginia.edu"
+      }
+
+      /* sort rows on smallScreen (table takes care of sort for larger screens) */
+      _sortRows(rows){
+        return (this.smallScreen)?
+          rows.sort((a,b)=>a.lastName-b.lastName):
+          rows;
+      }
+
+    }
+    window.customElements.define(UvalibStaff.is, UvalibStaff);
+  </script>
+</dom-module>

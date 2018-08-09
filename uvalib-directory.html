@@ -260,7 +260,7 @@
       }
 
       /* take care of any data model massaging here - this makes the array used in the directory */
-      _makeData(_query,_staffViewEnabled,_libraries,_people,_teams,_areas,_services){
+      _makeData(){
         return (this._isDataReady())?
           this._sortRows(this._filterRows(this._filterStaffRows(this[this._mainDataModel]))):
           [];
