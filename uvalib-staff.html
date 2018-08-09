@@ -35,16 +35,16 @@
             {
               _data: {
                 type: Array,
-                computed: "_makeData(_query,_staffViewEnabled,_libraries,_cachedPeople,_teams,_areas,_services,smallScreen)"
+                computed: "_makeData(_query,_staffViewEnabled,_libraries,_people,_teams,_areas,_services,smallScreen)"
               },
               _mainDataModel: {
                 type: String,
-                value: "_cachedPeople"
+                value: "_people"
               },
-              _cachedPeople: {
-                type: Array,
-                computed: "_makePeople(_libraries,_people,_teams)"
-              },
+//              _cachedPeople: {
+//                type: Array,
+//                computed: "_makePeople(_libraries,_people,_teams)"
+//              },
               searchPlaceholder: {
                 type: String,
                 value: "Search for Library staff"
@@ -82,6 +82,13 @@
         return uvalibStaffTemplate;
       }
 
+      /* take care of any data model massaging here - this makes the array used in the directory */
+      _makeData(){
+        return (this._isDataReady())?
+          this._sortRows(this._filterRows(this._filterStaffRows(this._makePeople()))):
+          [];
+      }
+
       _makePeople(){
         if (this._libraries && this._libraries.length>0
             && this._people && this._people.length>0
@@ -90,7 +97,7 @@
             if (this._libraries && this._people && this._teams) {
               var people = {};
               this._people.forEach(p=>{
-                if (p.computingId) {
+                if (p.computingId && p.displayName) {
                   people[p.computingId] = p;
                 }
               });

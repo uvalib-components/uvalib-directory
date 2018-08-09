@@ -247,7 +247,8 @@
 
       /* Is the data loaded and ready to use */
       _isDataReady() {
-        return (this._libraries && this._libraries.length>0
+        return (this[this._mainDataModel] && this[this._mainDataModel].length>0
+                    && this._libraries && this._libraries.length>0
                     && this._services && this._services.length>0
                     && this._people && this._people.length>0
                     && this._areas && this._areas.length>0
