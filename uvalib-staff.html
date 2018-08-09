@@ -217,7 +217,11 @@
       /* sort rows on smallScreen (table takes care of sort for larger screens) */
       _sortRows(rows){
         return (this.smallScreen)?
-          rows.sort((a,b)=>a.lastName-b.lastName):
+          rows.sort(function(a, b) {
+            var textA = a.lastName.toUpperCase();
+            var textB = b.lastName.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          }):
           rows;
       }
 
