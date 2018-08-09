@@ -1,10 +1,8 @@
 <link rel="import" href="uvalib-directory.html">
 <link rel="import" href="../uvalib-theme/uvalib-icons.html">
-<link rel="import" href="../uva-helper-libs/polyfills/string.includes.html">
-<link rel="import" href="../uva-helper-libs/polyfills/array.find.html">
-
 
 <dom-module id="uvalib-staff">
+  <link rel="lazy-import" group="uvalib-staff-photos" href="../iron-image/iron-image.html">
   <template>
     <custom-style>
       <style include="uvalib-theme">
@@ -41,10 +39,6 @@
                 type: String,
                 value: "_people"
               },
-//              _cachedPeople: {
-//                type: Array,
-//                computed: "_makePeople(_libraries,_people,_teams)"
-//              },
               searchPlaceholder: {
                 type: String,
                 value: "Search for Library staff"
@@ -64,7 +58,8 @@
               },
               showColumns: {
                 type:String,
-                value: "name,title,team,contact,library"
+                value: "name,title,team,contact,library",
+                observer: "_showColumnsChanged"
               }
 
             });
@@ -82,6 +77,11 @@
         return uvalibStaffTemplate;
       }
 
+      _showColumnsChanged(){
+        if (this.showColumns.includes('photo'))
+          this.importLazyGroup("uvalib-staff-photos");
+      }
+
       /* take care of any data model massaging here - this makes the array used in the directory */
       _makeData(){
         return (this._isDataReady())?
@@ -97,7 +97,7 @@
             if (this._libraries && this._people && this._teams) {
               var people = {};
               this._people.forEach(p=>{
-                if (p.computingId && p.displayName) {
+                if (p.computingId && p.displayName ) {
                   people[p.computingId] = p;
                 }
               });
@@ -190,6 +190,8 @@
 
       /* filter rows by _query and other parameters */
       _filterRows(rows){
+        if (this.team)
+          rows = rows.filter(row=>row.teams && row.teams.includes(this.team));
         return (this._query)?
           rows.filter(row=>row.displayName.toLowerCase().includes(this._query.toLowerCase())):
           rows;
