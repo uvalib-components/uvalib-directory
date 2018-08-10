@@ -78,11 +78,6 @@
         return uvalibStaffTemplate;
       }
 
-      created(){
-        super.created();
-        if (!Object.values) this.importLazyGroup();
-      }
-
       async initLazyLoad(init) {
         super.initLazyLoad(false);
         if (!Object.values) await this.importLazyGroup("uvalib-staff-polyfill");
