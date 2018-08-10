@@ -87,7 +87,7 @@
     </template>
 
     <!-- Grid for Larger screens -->
-    <vaadin-grid hidden$="[[smallScreen]]" height-by-rows="[[largeScreen]]" theme="no-border row-stripes wrap-cell-content" aria-label="Service directory listing" items="[[_data]]">
+    <vaadin-grid hidden$="[[_hideGrid(_data)]]" height-by-rows="[[largeScreen]]" theme="no-border row-stripes wrap-cell-content" aria-label="Service directory listing" items="[[_data]]">
       <template is="dom-repeat" items="[[columns]]" as="col">
         <vaadin-grid-column width="[[col.width]]" flex-grow="[[col.flexGrow]]">
           <template is="dom-if" if="dom-if" if="[[col.title]]">
@@ -183,6 +183,10 @@
                 type: String,
                 value: "_services"
               },
+              _init: {
+                type: Boolean,
+                value: false
+              },
 
               /* Does this directory have a staff only view */
               staffView: {
@@ -243,6 +247,10 @@
             uvalibDirectoryTemplate.content.insertBefore(superTemplateContents, null);
         }
         return uvalibDirectoryTemplate;
+      }
+
+      _hideGrid(arry) {
+        return this.smallScreen || !arry || arry.length<1;
       }
 
       /* Is the data loaded and ready to use */
@@ -317,9 +325,9 @@
 
       /* observer to staffView and called on ready event, loads staffview import group if needed */
       _staffViewChanged(){
-        if (this.container && this.staffView)
-          setTimeout(function(){this.importLazyGroup("uvalib-directory-staffview");}.bind(this),500);
         if (!this.staffView) this._staffViewEnabled = false;
+        if (this._init && this.container && this.staffView)
+          this.importLazyGroup("uvalib-directory-staffview");
       }
 
       /* observer to _staffmember property */
@@ -327,11 +335,12 @@
 
       /* override supers _screenChanged method, loads imports based on screensize */
       _screenChanged(){
-        // load vaadin grid for larger than small screens
-        if (!this.smallScreen)
-          this.importLazyGroup('uvalib-directory-table');
-        else
-          this.importLazyGroup('uvalib-directory-list');
+        if (this._init)
+          // load vaadin grid for larger than small screens
+          if (!this.smallScreen)
+            this.importLazyGroup('uvalib-directory-table');
+          else
+            this.importLazyGroup('uvalib-directory-list');
       }
 
       ready(){
@@ -344,13 +353,25 @@
         for (var i = 0; i < links.length; i++) {
           this.container.appendChild(links[i])
         }
-        this._staffViewChanged();
-        this._controlsChanged();
+
+        this.initLazyLoad();
+      }
+
+      async initLazyLoad() {
+        if (!this.smallScreen)
+          await this.importLazyGroup('uvalib-directory-table');
+        else
+          await this.importLazyGroup('uvalib-directory-list');
+        if (this.container && this.controls)
+          await this.importLazyGroup("uvalib-directory-controls");
+        if (this.container && this.staffView)
+          await this.importLazyGroup("uvalib-directory-staffview");
+        this._init = true;
       }
 
       /* observer of controls property */
       _controlsChanged() {
-        if (this.container && this.controls)
+        if (this._init && this.container && this.controls)
           this.importLazyGroup("uvalib-directory-controls");
       }
 
