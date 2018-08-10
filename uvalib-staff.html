@@ -1,8 +1,8 @@
 <link rel="import" href="uvalib-directory.html">
 <link rel="import" href="../uvalib-theme/uvalib-icons.html">
 
+
 <dom-module id="uvalib-staff">
-  <link rel="lazy-import" group="uvalib-staff-polyfill" href="../uva-helper-libs/polyfills/object.values-entries.html">
   <link rel="lazy-import" group="uvalib-staff-photos" href="../iron-image/iron-image.html">
   <template>
     <custom-style>
@@ -80,12 +80,12 @@
 
       async initLazyLoad(init) {
         super.initLazyLoad(false);
-        if (!Object.values) await this.importLazyGroup("uvalib-staff-polyfill");
+        // load stuff here
         this._init = (init==null)?true:init;
       }
 
       _showColumnsChanged(){
-        if (this.showColumns.includes('photo'))
+        if (this.showColumns.indexOf('photo')>-1)
           this.importLazyGroup("uvalib-staff-photos");
       }
 
@@ -118,7 +118,9 @@
                     }
                   });
               });
-              this._cPeople = Object.values(people);
+              // alt version of Object.values
+              this._cPeople = Object.keys(people).map(e => people[e])
+//              this._cPeople = Object.values(people);
               return this._cPeople;
             }
             return [];
@@ -198,9 +200,9 @@
       /* filter rows by _query and other parameters */
       _filterRows(rows){
         if (this.team)
-          rows = rows.filter(row=>row.teams && row.teams.includes(this.team));
+          rows = rows.filter(row=>row.teams && row.teams.indexOf(this.team)>-1);
         return (this._query)?
-          rows.filter(row=>row.displayName.toLowerCase().includes(this._query.toLowerCase())):
+          rows.filter(row=>row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>-1):
           rows;
       }
 
