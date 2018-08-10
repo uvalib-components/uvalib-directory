@@ -357,7 +357,7 @@
         this.initLazyLoad();
       }
 
-      async initLazyLoad() {
+      async initLazyLoad(init) {
         if (!this.smallScreen)
           await this.importLazyGroup('uvalib-directory-table');
         else
@@ -366,7 +366,7 @@
           await this.importLazyGroup("uvalib-directory-controls");
         if (this.container && this.staffView)
           await this.importLazyGroup("uvalib-directory-staffview");
-        this._init = true;
+        this._init = (init==null)?true:init;
       }
 
       /* observer of controls property */

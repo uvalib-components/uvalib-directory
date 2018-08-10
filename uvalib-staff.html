@@ -2,6 +2,7 @@
 <link rel="import" href="../uvalib-theme/uvalib-icons.html">
 
 <dom-module id="uvalib-staff">
+  <link rel="lazy-import" group="uvalib-staff-polyfill" href="../uva-helper-libs/polyfills/object.values-entries.html">
   <link rel="lazy-import" group="uvalib-staff-photos" href="../iron-image/iron-image.html">
   <template>
     <custom-style>
@@ -75,6 +76,17 @@
             uvalibStaffTemplate.content.insertBefore(superTemplateContents,null);
         }
         return uvalibStaffTemplate;
+      }
+
+      created(){
+        super.created();
+        if (!Object.values) this.importLazyGroup();
+      }
+
+      async initLazyLoad(init) {
+        super.initLazyLoad(false);
+        if (!Object.values) await this.importLazyGroup("uvalib-staff-polyfill");
+        this._init = (init==null)?true:init;
       }
 
       _showColumnsChanged(){
