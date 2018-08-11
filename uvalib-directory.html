@@ -289,7 +289,7 @@
       /* filter rows by _query and other parameters */
       _filterRows(rows){
         return (this._query)?
-          rows.filter(row=>row.title.toLowerCase().includes(this._query.toLowerCase())):
+          rows.filter(row=>row.title.toLowerCase().indexOf(this._query.toLowerCase())>-1):
           rows;
       }
 

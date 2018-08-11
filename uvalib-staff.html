@@ -81,11 +81,13 @@
       async initLazyLoad(init) {
         super.initLazyLoad(false);
         // load stuff here
+        if (this.showColumns.indexOf('photo')>-1)
+          await this.importLazyGroup("uvalib-staff-photos");
         this._init = (init==null)?true:init;
       }
 
       _showColumnsChanged(){
-        if (this.showColumns.indexOf('photo')>-1)
+        if (this.init && this.showColumns.indexOf('photo')>-1)
           this.importLazyGroup("uvalib-staff-photos");
       }
 
@@ -118,9 +120,7 @@
                     }
                   });
               });
-              // alt version of Object.values
               this._cPeople = Object.keys(people).map(e => people[e])
-//              this._cPeople = Object.values(people);
               return this._cPeople;
             }
             return [];
