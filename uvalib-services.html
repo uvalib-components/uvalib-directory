@@ -1,6 +1,5 @@
 <link rel="import" href="uvalib-directory.html">
 <link rel="import" href="../uvalib-theme/uvalib-icons.html">
-<link rel="import" href="../uva-helper-libs/polyfills/string.includes.html">
 <link rel="import" href="../uva-helper-libs/polyfills/array.find.html">
 
 
@@ -147,7 +146,7 @@
       /* filter rows by _query and other parameters */
       _filterRows(rows){
         return (this._query)?
-          rows.filter(row=>row.title.toLowerCase().includes(this._query.toLowerCase())||this._getLibs(row.library).reduce((a,b)=>a+" "+b.title,"").toLowerCase().includes(this._query.toLowerCase())):
+          rows.filter(row=>row.title.toLowerCase().indexOf(this._query.toLowerCase())>=0||this._getLibs(row.library).reduce((a,b)=>a+" "+b.title,"").toLowerCase().indexOf(this._query.toLowerCase())>=0):
           rows;
       }
 

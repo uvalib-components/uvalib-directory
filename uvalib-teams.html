@@ -30,11 +30,11 @@
                 type: String,
                 value: null
               },
-              _controls: {
-                type: Boolean,
-                computed: '_showControls(area)',
-                observer: "_controlsChanged"
-              },
+//              _controls: {
+//                type: Boolean,
+//                computed: '_showControls(area)',
+//                observer: "_controlsChanged"
+//              },
               columns: {
                 type: Array,
                 computed: "_makeColumns(area)"
@@ -42,7 +42,7 @@
               showColumns: {
                 type:String,
                 value: "name,title,area,contact,library",
-                observer: "_showColumnsChanged"
+//                observer: "_showColumnsChanged"
               }
 
             });
@@ -81,9 +81,9 @@
       /* filter rows by _query and other parameters */
       _filterRows(rows){
         if (this.area)
-          rows = rows.filter(row=>row.area && row.area.includes(this.area));
+          rows = rows.filter(row=>row.area && row.area.indexOf(this.area)>=0);
         return (this._query)?
-          rows.filter(row=>row.displayName.toLowerCase().includes(this._query.toLowerCase())):
+          rows.filter(row=>row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>=0):
           rows;
       }
 
