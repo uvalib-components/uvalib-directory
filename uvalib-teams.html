@@ -1,5 +1,4 @@
 <link rel="import" href="uvalib-directory.html">
-<link rel="import" href="../uvalib-theme/uvalib-icons.html">
 
 <dom-module id="uvalib-teams">
 
@@ -30,21 +29,10 @@
                 type: String,
                 value: null
               },
-//              _controls: {
-//                type: Boolean,
-//                computed: '_showControls(area)',
-//                observer: "_controlsChanged"
-//              },
               columns: {
                 type: Array,
-                computed: "_makeColumns(area)"
-              },
-              showColumns: {
-                type:String,
-                value: "name,title,area,contact,library",
-//                observer: "_showColumnsChanged"
+                computed: "_makeColumns(area,_init)"
               }
-
             });
       }
 
