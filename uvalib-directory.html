@@ -230,6 +230,11 @@
                     }
                   }
                 ];}
+              },
+
+              _initBuffer: {
+                type: Array,
+                value: []
               }
 
             });
@@ -326,6 +331,7 @@
         if (!this.staffView) this._staffViewEnabled = false;
         if (this._init && this.container && this.staffView)
           this.importLazyGroup("uvalib-directory-staffview");
+        if (!this._init) this._initBuffer.push( this._staffViewChanged.bind(this) );
       }
 
       /* observer to _staffmember property */
@@ -339,6 +345,9 @@
             this.importLazyGroup('uvalib-directory-table');
           else
             this.importLazyGroup('uvalib-directory-list');
+        else {
+          this._initBuffer.push( this._screenChanged.bind(this) );
+        }
       }
 
       ready(){
@@ -365,12 +374,15 @@
         if (this.container && this.staffView)
           await this.importLazyGroup("uvalib-directory-staffview");
         this._init = (init==null)?true:init;
+        this._initBuffer.forEach(c=>c());
       }
 
       /* observer of controls property */
       _controlsChanged() {
         if (this._init && this.container && this.controls)
           this.importLazyGroup("uvalib-directory-controls");
+//        if (!this._init) setTimeout(this._controlsChanged(),1000);
+        if (!this._init) this._initBuffer.push( this._controlsChanged.bind(this) );
       }
 
       /* signIn with netbadge method */
