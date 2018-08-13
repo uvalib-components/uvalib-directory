@@ -90,16 +90,14 @@
     <vaadin-grid hidden$="[[_hideGrid(_data)]]" height-by-rows="[[largeScreen]]" theme="no-border row-stripes wrap-cell-content" aria-label="Service directory listing" items="[[_data]]">
       <template is="dom-repeat" items="[[columns]]" as="col">
         <vaadin-grid-column width="[[col.width]]" flex-grow="[[col.flexGrow]]">
-          <template is="dom-if" if="dom-if" if="[[col.title]]">
-            <template class="header">
-              <template is="dom-if" if="[[col.sortable]]">
-                <vaadin-grid-sorter direction="[[col.sortable.dir]]" path="[[col.sortable.path]]">
-                  <div class="title-text">[[col.title]]</div>
-                </vaadin-grid-sorter>
-              </template>
-              <template is="dom-if" if="[[!col.sortable]]">
+          <template class="header">
+            <template is="dom-if" if="[[col.sortable]]">
+              <vaadin-grid-sorter direction="[[col.sortable.dir]]" path="[[col.sortable.path]]">
                 <div class="title-text">[[col.title]]</div>
-              </template>
+              </vaadin-grid-sorter>
+            </template>
+            <template is="dom-if" if="[[!col.sortable]]">
+              <div class="title-text">[[col.title]]</div>
             </template>
           </template>
           <template>
