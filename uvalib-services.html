@@ -143,7 +143,8 @@
       /* filter rows by _query and other parameters */
       _filterRows(rows){
         return (this._query)?
-          rows.filter(row=>row.title.toLowerCase().indexOf(this._query.toLowerCase())>=0||this._getLibs(row.library).reduce((a,b)=>a+" "+b.title,"").toLowerCase().indexOf(this._query.toLowerCase())>=0):
+          rows.filter(
+            row=>row.title.toLowerCase().indexOf(this._query.toLowerCase())>=0||(row.body && row.body.toLowerCase().indexOf(this._query.toLowerCase())>=0)||this._getLibs(row.library).reduce((a,b)=>a+" "+b.title,"").toLowerCase().indexOf(this._query.toLowerCase())>=0):
           rows;
       }
 
