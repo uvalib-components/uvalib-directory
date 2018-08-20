@@ -1,7 +1,7 @@
 <link rel="import" href="../uvalib-theme/uvalib-ui-element.html">
 <link rel="import" href="../uvalib-theme/uvalib-theme.html">
 <link rel="import" href="../paper-button/paper-button.html" >
-<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../uvalib-search-box/uvalib-simple-search-box.html">
 <link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
 
 <dom-module id="uvalib-directory-controls">
@@ -33,6 +33,10 @@
         #login-buttons {
           float: right;
         }
+        uvalib-simple-search-box {
+          --uvalib-search-box-border: 2px solid var(--uvalib-secondary-lt-grey);
+          --uvalib-background-search: var(--uvalib-main-jefferson-blue)
+        }
       </style>
     </custom-style>
 
@@ -44,11 +48,7 @@
         </div>
       </template>
       <template is="dom-if" if="[[!smallScreen]]" restamp>
-        <paper-input label="[[searchPlaceholder]]" value="{{query}}">
-          <div slot="prefix">
-            <span class="uvalib-icon-search uva-padding-right"></span>
-          </div>
-        </paper-input>
+        <uvalib-simple-search-box label="[[searchPlaceholder]]" placeholder="[[searchPlaceholder]]" value="{{query}}"></uvalib-simple-search-box>
         <template is="dom-if" if="[[staffView]]" restamp>
           <paper-toggle-button id="staffSelect" checked="{{staffViewEnabled}}" hidden$="[[!staffmember]]" class="orange">
             <template is="dom-if" if="[[staffViewEnabled]]"><span class"staff-text">Staff View</span></template>
@@ -64,11 +64,7 @@
           </paper-toggle-button>
         </template>
         <div class="uva-margin-top">
-          <paper-input label="Search the directory" value="{{query}}">
-            <div slot="prefix">
-              <span class="uvalib-icon-search uva-padding-right"></span>
-            </div>
-          </paper-input>
+          <uvalib-simple-search-box value="{{query}}" label="[[searchPlaceholder]]" placeholder="[[searchPlaceholder]]"></uvalib-simple-search-box>
         </div>
       </template>
 
