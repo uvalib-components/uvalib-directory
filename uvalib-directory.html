@@ -20,6 +20,9 @@
           display: none;
         }
         vaadin-grid {
+          --vaadin-grid-cell: {
+            padding: 120px;
+          };
           --vaadin-grid-body-cell: { border: 1px solid green; };
           --vaadin-grid-cell-content: { border: 1px solid blue; };
         }
@@ -66,6 +69,21 @@
         iron-list {
           width: 100%;
         }
+
+        .cell {
+          padding-top: var(--uvalib-spacing-unit);
+          padding-bottom: var(--uvalib-spacing-unit);
+        }
+
+        vaadin-grid-sorter {
+          color: var(--uvalib-link-color);
+        }
+        vaadin-grid-sorter:visited {
+          color: var(--uvalib-link-color-visited);
+        }
+        vaadin-grid-sorter:hover {
+          text-decoration: underline;
+        }
       </style>
     </custom-style>
 
@@ -101,7 +119,7 @@
             </template>
           </template>
           <template>
-            <div staff$="[[_and(col.highlight,item.audience)]]" inner-h-t-m-l="[[_mkCell(col,item)]]"></div>
+            <div class="cell" staff$="[[_and(col.highlight,item.audience)]]" inner-h-t-m-l="[[_mkCell(col,item)]]"></div>
           </template>
         </vaadin-grid-column>
       </template>
