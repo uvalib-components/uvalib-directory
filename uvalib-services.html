@@ -4,11 +4,6 @@
   <template>
     <custom-style>
       <style include="uvalib-theme">
-        .service-title {
-          font-size: var(--uvalib-main-font-size-unit);
-          font-weight: 700;
-          padding-top: var(--uvalib-spacing-unit);
-        }
         .service-description p {
           margin-top: 0;
         }
@@ -19,9 +14,6 @@
         .services-location li {
           line-height: calc(var(--uvalib-spacing-unit)*1.1);
           padding-bottom: var(--uvalib-spacing-unit);
-        }
-        .mobileDirectory .service-title {
-          font-size: calc(var(--uvalib-main-font-size-unit)*1.2);
         }
         .mobileDirectory .services-location li {
           padding-bottom: calc(var(--uvalib-spacing-unit)/2);
@@ -70,8 +62,8 @@
                           hideAudience = (item.audience)?"":"hidden",
                           staffText = (item.audience)?"staff-text":"";
                       return `
-                        <div class="title service-title" ${hideTitle}>${item.title}</div>
-                        <div class="title service-title" ${hideLink}><a href="${item.siteLink}">${item.title}</a></div>
+                        <div class="title cell-title" ${hideTitle}>${item.title}</div>
+                        <div class="title cell-title" ${hideLink}><a href="${item.siteLink}">${item.title}</a></div>
                         <div class="description service-description" ${hideBody}>${item.body}</div>
                         <span ${hideAudience} ${staffText}>staff info</span>
                       `;

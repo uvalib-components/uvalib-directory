@@ -6,6 +6,7 @@
   <template>
     <custom-style>
       <style include="uvalib-theme">
+
         iron-image {
           width:90px !important;
           height:90px !important;
@@ -150,7 +151,7 @@
               title:"Name",
               sortable:{dir:'asc',path:'lastName'},
               mkCell:function(item,that){
-                return `<a href="/staff/${item.computingId}">${that._getName(item)}</p>`;
+                return `<div class="cell-title"><a href="/staff/${item.computingId}">${that._getName(item)}</a></div>`;
               }
             });
         if (this.showColumns.indexOf("title") > -1)
