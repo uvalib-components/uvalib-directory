@@ -1,5 +1,6 @@
 <link rel="import" href="../uvalib-theme/uvalib-ui-element.html">
 <link rel="import" href="../uva-models/uva-library.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 
 <dom-module id="uvalib-staff-card">
 
@@ -35,6 +36,7 @@
         <div id="title" hidden$="[[!_person.jobTitle]]">[[_person.jobTitle]]</div>
         <div id="phone" hidden$="[[!_person.phone]]"><a href="tel:[[_stripPhone(_person.phone)]]">[[_person.phone]]</a></div>
         <div id="email" hidden$="[[!_person.email]]"><a href="mailto:[[_person.email]]">[[_person.email]]</a></div>
+        <div id="twitter" hidden$="[[!_person.twitter]]"><a href="https://twitter.com/[[_person.twitter]]"><iron-icon icon="twitter-square"></iron-icon>@[[_person.twitter]]</a></div>
       </div>
     </div>
 
