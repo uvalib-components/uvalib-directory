@@ -202,7 +202,7 @@
         if (this.team)
           rows = rows.filter(row=>row.teams && row.teams.indexOf(this.team)>-1);
         return (this._query)?
-          rows.filter(row=>row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>-1):
+          rows.filter( row=> row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>-1 || row.jobTitle.toLowerCase().indexOf(this._query.toLowerCase())>-1 ):
           rows;
       }
 
