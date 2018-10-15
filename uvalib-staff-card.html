@@ -36,7 +36,8 @@
         <div><img src="[[_person.field_image.url]]" alt="[[_person.field_image.alt]]" /></div>
       </template>
       <ul id="contact-info">
-        <li id="name">[[_person.displayName]]</li>
+        <li id="name">[[_getName(_person.displayName, preferredName)]]</li>
+        <!-- <li id="name">[[_person.displayName, preferredName]]</li> -->
         <li id="title" hidden$="[[!_person.jobTitle]]">[[_person.jobTitle]]</li>
         <li id="phone" hidden$="[[!_person.phone]]"><a href="tel:[[_stripPhone(_person.phone)]]">[[_person.phone]]</a></li>
         <li id="email" hidden$="[[!_person.email]]"><a href="mailto:[[_person.email]]">[[_person.email]]</a></li>
@@ -93,6 +94,11 @@
       }
       getPerson(_people){
         return this._first(_people);
+      }
+      _getName(personName, preferredName){
+        // return "Fred";
+        return (preferredName)? PreferredName:(personName)?personName:""
+        // return (preferredName)? preferredName: (personName)? personName: "";
       }
       _stripPhone(phone){
         return phone.replace(/[^0-9]/, "").replace('-','');
