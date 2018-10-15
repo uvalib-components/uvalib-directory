@@ -74,7 +74,8 @@
               _person: {
                 type: Object,
                 computed: "getPerson(_people)"
-              }
+              },
+              preferredName: String
             });
       }
 
@@ -97,7 +98,7 @@
       }
       _getName(personName, preferredName){
         // return "Fred";
-        return (preferredName)? PreferredName:(personName)?personName:""
+        return (preferredName)? preferredName:(personName)?personName:""
         // return (preferredName)? preferredName: (personName)? personName: "";
       }
       _stripPhone(phone){
