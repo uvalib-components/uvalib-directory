@@ -37,10 +37,9 @@
       </template>
       <ul id="contact-info">
         <li id="name">[[_getName(_person.displayName, preferredName)]]</li>
-        <!-- <li id="name">[[_person.displayName, preferredName]]</li> -->
         <li id="title" hidden$="[[!_person.jobTitle]]">[[_person.jobTitle]]</li>
         <li id="phone" hidden$="[[!_person.phone]]"><a href="tel:[[_stripPhone(_person.phone)]]">[[_person.phone]]</a></li>
-        <li id="email" hidden$="[[!_person.email]]"><a href="mailto:[[_person.email]]">[[_person.email]]</a></li>
+        <li id="email" hidden$="[[!_person.email]]"><a href="mailto:[[_getName(_person.email, preferredEmail)]]">[[_getName(_person.email, preferredEmail)]]</a></li>
         <li id="twitter" hidden$="[[!_person.twitter]]"><a href="https://twitter.com/[[_person.twitter]]"><iron-icon icon="twitter-square"></iron-icon>&nbsp;@[[_person.twitter]]</a></li>
       </ul>
     </div>
@@ -75,7 +74,8 @@
                 type: Object,
                 computed: "getPerson(_people)"
               },
-              preferredName: String
+              preferredName: String,
+              preferredEmail: String
             });
       }
 
@@ -97,9 +97,10 @@
         return this._first(_people);
       }
       _getName(personName, preferredName){
-        // return "Fred";
         return (preferredName)? preferredName:(personName)?personName:""
-        // return (preferredName)? preferredName: (personName)? personName: "";
+      }
+      _getEmail(personEmail, preferredEmail){
+        return (preferredEmail)? preferredEmail:(personEmail)?personEmail:""
       }
       _stripPhone(phone){
         return phone.replace(/[^0-9]/, "").replace('-','');
