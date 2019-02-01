@@ -1,5 +1,5 @@
 <link rel="import" href="uvalib-directory.html">
-
+<script src="../fuse.js/dist/fuse.min.js"></script>
 
 <dom-module id="uvalib-staff">
   <link rel="lazy-import" group="uvalib-staff-photos" href="../iron-image/iron-image.html">
@@ -199,10 +199,25 @@
 
       /* filter rows by _query and other parameters */
       _filterRows(rows){
+        var options = {
+          shouldSort: true,
+          tokenize: true,
+          matchAllTokens: true,
+          threshold: 0.0,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['computingId', 'displayName', 'firstName', 'jobTitle', 'lastName']
+        };
+        var fuse = new Fuse(rows, options);
         if (this.team)
           rows = rows.filter(row=>row.teams && row.teams.indexOf(this.team)>-1);
+//        return (this._query)?
+//          rows.filter( row=> row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>-1 || row.jobTitle.toLowerCase().indexOf(this._query.toLowerCase())>-1 ):
+//          rows;
         return (this._query)?
-          rows.filter( row=> row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>-1 || row.jobTitle.toLowerCase().indexOf(this._query.toLowerCase())>-1 ):
+          fuse.search(this._query):
           rows;
       }
 
