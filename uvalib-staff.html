@@ -210,15 +210,21 @@
           minMatchCharLength: 1,
           keys: ['computingId', 'displayName', 'firstName', 'jobTitle', 'lastName']
         };
-        var fuse = new Fuse(rows, options);
+
         if (this.team)
           rows = rows.filter(row=>row.teams && row.teams.indexOf(this.team)>-1);
-//        return (this._query)?
-//          rows.filter( row=> row.displayName.toLowerCase().indexOf(this._query.toLowerCase())>-1 || row.jobTitle.toLowerCase().indexOf(this._query.toLowerCase())>-1 ):
-//          rows;
-        return (this._query)?
-          fuse.search(this._query):
-          rows;
+        var results = rows;
+        if (this._query) {
+          var fuse = new Fuse(rows, options);
+          results = fuse.search(this._query)
+          if (results.length == 0)
+            this._message = "Not found; try a different spelling."
+          else
+            this._message = null;
+        } else {
+          this._message = null;
+        }
+        return results;
       }
 
       /* Don't show search if team is specified */

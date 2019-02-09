@@ -113,6 +113,7 @@
     <template is="dom-if" if="[[controls]]" restamp>
       <uvalib-directory-controls query="{{_query}}" staff-view="{{staffView}}" staff-view-enabled="{{_staffViewEnabled}}" staffmember="{{_staffmember}}"
           signed-in="{{_signedIn}}" on-signin="_signIn" on-signout="_signOut" searchPlaceholder="[[searchPlaceholder]]"></uvalib-directory-controls>
+      <div id="message" hidden$="[[!_message]]">[[_message]]</div>    
     </template>
 
     <!-- Grid for Larger screens -->
