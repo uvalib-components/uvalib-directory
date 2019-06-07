@@ -141,7 +141,7 @@
               flexGrow: 0,
               mkCell: function(item,that){
                 return (item.field_image)?
-                  `<iron-image alt="Image of ${item.displayName}" sizing="cover" position="top" fade class="round" src="${item.field_image.url.replace('https://drupal.lib.virginia.edu/sites/default','https://www.library.virginia.edu')}"></iron-image>`:"";
+                  `<iron-image alt="Image of ${item.displayName}" sizing="cover" position="top" fade class="round" src="${item.field_image.url.replace('https://www.library.virginia.edu/files','https://static.lib.virginia.edu/uvalibappfiles').replace(/^(.*)\/(.*)$/,"$1/SM/$2")}"></iron-image>`:"";
               }
             });
         if (this.showColumns.indexOf("name") > -1)
