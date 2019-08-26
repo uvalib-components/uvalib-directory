@@ -33,7 +33,7 @@
     <uva-library path="people" filter="[[_filter]]" items="{{_people}}"></uva-library>
     <div class="layout horizontal">
       <template is="dom-if" if="[[_person.field_image]]">
-        <div><img src="[[_person.field_image.url]]" alt="[[_person.field_image.alt]]" /></div>
+        <div><img class="img-responsive"src="[[_person.field_image.url]]" alt="[[_person.field_image.alt]]" /></div>
       </template>
       <ul id="contact-info">
         <li id="name">[[_getName(_person.displayName, preferredName)]]</li>
