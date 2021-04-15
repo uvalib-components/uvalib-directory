@@ -46,7 +46,7 @@
       <ul id="contact-info">
         <li id="name">[[_getName(_person.displayName, preferredName)]]</li>
         <li id="title" hidden$="[[!_person.jobTitle]]">[[_person.jobTitle]]</li>
-        <li id="phone" hidden$="[[!_person.phone]]"><a href="tel:[[_stripPhone(_person.phone)]]">[[_person.phone]]</a></li>
+        <li id="phone" hidden$="[[!_person.phone]]"><a href="tel:[[_stripPhone(_person.phone)]]">[[_getPhone(_person.phone, preferredPhone)]]</a></li>
         <li id="email" hidden$="[[!_person.email]]"><a href="mailto:[[_getName(_person.email, preferredEmail)]]">[[_getName(_person.email, preferredEmail)]]</a></li>
         <li id="twitter" hidden$="[[!_person.twitter]]"><a href="https://twitter.com/[[_person.twitter]]"><iron-icon icon="twitter-square"></iron-icon>&nbsp;@[[_person.twitter]]</a></li>
       </ul>
@@ -83,7 +83,8 @@
                 computed: "getPerson(_people)"
               },
               preferredName: String,
-              preferredEmail: String
+              preferredEmail: String,
+              preferredPhone: String
             });
       }
 
@@ -109,6 +110,9 @@
       }
       _getEmail(personEmail, preferredEmail){
         return (preferredEmail)? preferredEmail:(personEmail)?personEmail:""
+      }
+      _getPhone(personPhone, preferredPhone){
+        return (preferredPhone)? preferredPhone:(personPhone)?personPhone:""
       }
       _stripPhone(phone){
         return phone.replace(/[^0-9]/, "").replace('-','');
