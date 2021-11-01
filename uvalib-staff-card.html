@@ -44,11 +44,11 @@
         <div><img class="img-responsive"src="[[_person.field_image.url]]" alt="[[_person.field_image.alt]]" /></div>
       </template>
       <ul id="contact-info">
-        <li id="name">[[_getName(_person.displayName, preferredName)]]</li>
-        <li id="title" hidden$="[[!_person.jobTitle]]">[[_person.jobTitle]]</li>
-        <li id="phone" hidden$="[[!_person.phone]]"><a href="tel:[[_stripPhone(_person.phone)]]">[[_getPhone(_person.phone, preferredPhone)]]</a></li>
-        <li id="email" hidden$="[[!_person.email]]"><a href="mailto:[[_getName(_person.email, preferredEmail)]]">[[_getName(_person.email, preferredEmail)]]</a></li>
-        <li id="twitter" hidden$="[[!_person.twitter]]"><a href="https://twitter.com/[[_person.twitter]]"><iron-icon icon="twitter-square"></iron-icon>&nbsp;@[[_person.twitter]]</a></li>
+        <li id="name">[[_getPreferred(_person.displayName, preferredName)]]</li>
+        <li id="title" hidden$="[[!_getPreferred(_person.jobTitle, preferredTitle)]]">[[_getPreferred(_person.jobTitle, preferredTitle)]]</li>
+        <li id="phone" hidden$="[[!_getPreferred(_person.phone, preferredPhone)]]"><a href="tel:[[_stripPhone(_person.phone, preferredPhone)]]">[[_getPreferred(_person.phone, preferredPhone)]]</a></li>
+        <li id="email" hidden$="[[!_getPreferred(_person.email, preferredEmail)]]"><a href="mailto:[[_getPreferred(_person.email, preferredEmail)]]">[[_getPreferred(_person.email, preferredEmail)]]</a></li>
+        <li id="twitter" hidden$="[[!_getPreferred(_person.twitter, preferredTwitter)]]"><a href="https://twitter.com/[[_getPreferred(_person.twitter, preferredTwitter)]]"><iron-icon icon="twitter-square"></iron-icon>&nbsp;@[[_getPreferred(_person.twitter, preferredTwitter)]]</a></li>
       </ul>
     </div>
 
@@ -82,9 +82,26 @@
                 type: Object,
                 computed: "getPerson(_people)"
               },
-              preferredName: String,
-              preferredEmail: String,
-              preferredPhone: String
+              preferredName: {
+                type: String,
+                value: ''
+              },
+              preferredEmail: {
+                type: String,
+                value: ''
+              },
+              preferredPhone: {
+                type: String,
+                value: ''
+              },
+              preferredTitle: {
+                type: String,
+                value: ''
+              },
+              preferredTwitter: {
+                type: String,
+                value: ''
+              }
             });
       }
 
@@ -105,16 +122,11 @@
       getPerson(_people){
         return this._first(_people);
       }
-      _getName(personName, preferredName){
-        return (preferredName)? preferredName:(personName)?personName:""
+      _getPreferred(personField, preferredField){
+        return (preferredField)? preferredField:(personField)?personField:""
       }
-      _getEmail(personEmail, preferredEmail){
-        return (preferredEmail)? preferredEmail:(personEmail)?personEmail:""
-      }
-      _getPhone(personPhone, preferredPhone){
-        return (preferredPhone)? preferredPhone:(personPhone)?personPhone:""
-      }
-      _stripPhone(phone){
+      _stripPhone(personPhone, preferredPhone){
+        var phone = this._getPreferred(personPhone, preferredPhone);
         return phone.replace(/[^0-9]/, "").replace('-','');
       }
     }
